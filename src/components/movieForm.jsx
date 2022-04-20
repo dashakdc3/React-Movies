@@ -7,12 +7,7 @@ import { useNavigate } from "react-router-dom";
 import formToolTip from "./../commonComponents/form";
 
 function MovieForm(props) {
-  const [state, setState] = useState({
-    data: { title: "", genreId: "", numberInStock: "", dailyRentalRate: "" },
-    genres: [],
-    errors: {},
-  });
-
+  // const [errors, setErrors] = useState({});
   const schema = {
     _id: Joi.string(),
     title: Joi.string().required().label("Title"),
@@ -29,6 +24,13 @@ function MovieForm(props) {
       .label("Daily Rental Rate"),
   };
 
+  const [state, setState] = useState({
+    data: { title: "", genreId: "", numberInStock: "", dailyRentalRate: "" },
+    genres: [],
+    errors: {},
+    schema: schema,
+  });
+
   const { id } = useParams();
   const history = useNavigate();
 
@@ -42,7 +44,7 @@ function MovieForm(props) {
     const movie = getMovie(movieId);
     if (!movie) return history.replace("/not-found");
 
-    setState({ data: this.mapToViewModel(movie) });
+    setState({ data: mapToViewModel(movie) });
   });
 
   const mapToViewModel = (movie) => {

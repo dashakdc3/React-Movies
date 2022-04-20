@@ -6,7 +6,7 @@ function formToolTip(Component) {
   return class Form extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { data: {}, errors: {} };
+      this.state = { data: {}, errors: {}, schema: {} };
 
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
@@ -14,15 +14,13 @@ function formToolTip(Component) {
       this.renderSelect = this.renderSelect.bind(this);
       this.renderInput = this.renderInput.bind(this);
     }
-
-    // state = {
-    //   data: {},
-    //   errors: {},
-    // };
-
     validate = () => {
       const options = { abortEarly: false };
-      const { error } = Joi.validate(this.state.data, this.schema, options);
+      const { error } = Joi.validate(
+        this.state.data,
+        this.state.schema,
+        options
+      );
       // Joi.validate its oun method
       if (!error) return null;
 
@@ -34,20 +32,26 @@ function formToolTip(Component) {
 
     validateProperty = ({ name, value }) => {
       const obj = { [name]: value };
-      const schema = { [name]: this.schema[name] };
+      const schema = { [name]: this.state.schema[name] };
       const { error } = Joi.validate(obj, schema);
       return error ? error.details[0].message : null;
     };
 
     handleSubmit = (e) => {
       // e.preventDefault();
+      //     if (e && e.preventDefault) { e.preventDefault(); }
 
       const errors = this.validate();
       this.setState({ errors: errors || {} });
       if (errors) return;
 
-      this.doSubmit();
+      // this.props.doSubmit();
     };
+
+    // doSubmit = () => {
+    //   saveMovie(setState.data);
+    //   history.push("/movies");
+    // };
 
     handleChange = ({ currentTarget: input }) => {
       const errors = { ...this.state.errors };
@@ -106,12 +110,15 @@ function formToolTip(Component) {
         <div>
           <Component
             {...this.props}
+            schema={this.state.schema}
             data={this.state.data}
             errors={this.state.errors}
             handleSubmit={this.handleSubmit}
             renderInput={this.renderInput}
             renderSelect={this.renderSelect}
             renderButton={this.renderButton}
+            validate={this.validate}
+            validateProperty={this.validateProperty}
           />
         </div>
       );
