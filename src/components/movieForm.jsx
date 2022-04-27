@@ -36,7 +36,6 @@ function MovieForm(props) {
 
   useEffect(() => {
     const genres = getGenres();
-    setState({ genres });
 
     const movieId = id;
     if (movieId === "new") return;
@@ -44,7 +43,7 @@ function MovieForm(props) {
     const movie = getMovie(movieId);
     if (!movie) return history.replace("/not-found");
 
-    setState({ data: mapToViewModel(movie) });
+    setState({ data: mapToViewModel(movie), genres: genres });
   });
 
   const mapToViewModel = (movie) => {
@@ -65,9 +64,9 @@ function MovieForm(props) {
   return (
     <div>
       <h1>Movie Form</h1>
-      <form onSubmit={props.handleSubmit()}>
+      <form onSubmit={props.handleSubmit}>
         {props.renderInput("title", "Title")}
-        {props.renderSelect("genreId", "Genre", props.state.genres)}
+        {props.renderSelect("genreId", "Genre", state.genres)}
         {props.renderInput("numberInStock", "Number in Stock", "number")}
         {props.renderInput("dailyRentalRate", "Rate")}
         {props.renderButton("Save")}
@@ -76,4 +75,4 @@ function MovieForm(props) {
   );
 }
 
-export default formToolTip(MovieForm);
+export default MovieForm;
