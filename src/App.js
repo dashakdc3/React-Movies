@@ -24,6 +24,7 @@ import LoginForm from './components/loginForm';
 import RegisterForm from './components/registerForm';
 import "./App.css";
 import Joi from "joi-browser";
+import Form from "./commonComponents/form";
 
 class App extends Component {
   render() {
@@ -33,7 +34,7 @@ class App extends Component {
         <main className="container">
           <Routes>
             {/*  the first router that matches will be used */}
-            <Route path="/movies/:id" element={<MovieForm/>}/>
+            <Route path="/movies/:id" element={<Form inner={MovieForm}/>}/>
             {/* <Route path="/movies/:id" render={(props) => <MovieForm anotherParam={} {...props}/>}*/}
             {/* {...props}/>} to save location, history and match */}
             <Route path="/login" element={<LoginForm/>} />
